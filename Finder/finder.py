@@ -18,7 +18,7 @@ class Finder():
 		printArray("Finder: valores relativos sao: ", relative_array)
 
 
-		print "Finder: Fazendo a busca de " + str(string) + " em " + str(file)
+		self.relativeSearch(file, string)
 
 
 	# dado uma string, retorna array de valores relativos absolutos
@@ -43,7 +43,10 @@ class Finder():
 
 		while i < len(array_hexa) - 1:
 
-			_abs = abs(int(array_hexa[i], 16) - int(array_hexa[i + 1], 16))
+			a = array_hexa[i]
+			b = array_hexa[i + 1]
+
+			_abs = self.absoluteDifferenceBetweenTwoHexadecimals(a, b)
 			relative_values.append(_abs)
 			i = i + 1
 
@@ -63,7 +66,27 @@ class Finder():
 		return relative_values
 
 
+	# faz o trabalho sujo da busca
+	def relativeSearch(self, file, string):
 
+		#
+		# TODO busca
+		#
+
+		print "Finder: Fazendo a busca de " + str(string) + " em " + str(file)
+
+
+	# retorna a difereça absoluta (em decimal) entre dois hexas. 
+	def absoluteDifferenceBetweenTwoHexadecimals(self, a, b):
+		
+		_a = int(a, 16)
+		_b = int(b, 16)
+
+		return abs(_a - _b)
+
+
+#
+# prints an array
 def printArray(msg, array):
 
 	a = ""
