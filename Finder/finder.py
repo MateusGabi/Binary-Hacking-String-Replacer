@@ -15,6 +15,7 @@ class Finder():
 	# metodo principal
 	def run(self, file, string):
 		print "Finder: rodando..."
+		self.filename = 'SMario.sfc'
 		self.relativeSearch('SMario.sfc', string)
 
 
@@ -59,6 +60,26 @@ class Finder():
 		return relative_values
 
 
+	def getRelativeValuesBySFile(self):
+
+		array_hexa = self.fileToByteArray(self.filename)
+
+		## calcula a diferenca ##
+		i = 0
+		relative_values = []
+
+		while i < len(array_hexa) - 1:
+
+			a = array_hexa[i]
+			b = array_hexa[i + 1]
+
+			_abs = self.absoluteDifferenceBetweenTwoHexadecimals(a, b)
+			relative_values.append(_abs)
+			i = i + 1
+
+		return relative_values
+
+
 	# retorna um array de hexadecimais dado a string. Exemplo:
 	# "string" => [73, 74, 72, 69, 6e, 67]
 	def translateStringToHexadecimalArray(self, string):
@@ -80,18 +101,10 @@ class Finder():
 		relative_array = self.getRelativeValuesByString(string)
 
 		# pegamos o array de byte do arquivo
-		byte_array = self.fileToByteArray(filename)
+		byte_array = self.getRelativeValuesBySFile()
 
-		# iteramos pelo byte de array para tentar dar match
-		current_byte = 1;
-		l = len(byte_array)
+		print byte_array
 
-		while current_byte < l - 1:
-			diff_file = self.absoluteDifferenceBetweenTwoHexadecimals(byte_array[current_byte], byte_array[current_byte + 1])
-
-			if diff_file == relative_array[0]:
-				temp_cb = current_byte + 1
-				temp_
 
 
 	# retorna a difereça absoluta (em decimal) entre dois hexas. 
