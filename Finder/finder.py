@@ -1,4 +1,5 @@
-#
+# -*- coding: utf-8 -*-
+
 # Finder.
 #
 # A partir de um arquivo binario e de uma string de busca,
@@ -6,19 +7,22 @@
 # string dentro do documento.
 #
 # @author Mateus Gabi Moreira
+
+import binascii
+
 class Finder():
 
 	# metodo principal
 	def run(self, file, string):
 		print "Finder: rodando..."
-
-		relative_array = self.getRelativeValuesByString(string)
-
-
-		printArray("Finder: valores relativos sao: ", relative_array)
+		self.relativeSearch('SMario.sfc', string)
 
 
-		self.relativeSearch(file, string)
+	def fileToByteArray(self, filename):
+		with open('SMario.sfc', 'rb') as f:
+			hexdata = binascii.hexlify(f.read())
+
+		return map(''.join, zip(hexdata[::2], hexdata[1::2]))
 
 
 	# dado uma string, retorna array de valores relativos absolutos
@@ -50,7 +54,7 @@ class Finder():
 			relative_values.append(_abs)
 			i = i + 1
 
-
+		print "Finder: valores relativos de " + str(string) + " é " + str(relative_values)
 
 		return relative_values
 
@@ -67,13 +71,27 @@ class Finder():
 
 
 	# faz o trabalho sujo da busca
-	def relativeSearch(self, file, string):
+	def relativeSearch(self, filename, string):
 
-		#
-		# TODO busca
-		#
 
-		print "Finder: Fazendo a busca de " + str(string) + " em " + str(file)
+		print "Finder: Fazendo a busca de " + str(string) + " em " + str(filename)
+
+		# pegamos os valores relativos da string
+		relative_array = self.getRelativeValuesByString(string)
+
+		# pegamos o array de byte do arquivo
+		byte_array = self.fileToByteArray(filename)
+
+		# iteramos pelo byte de array para tentar dar match
+		current_byte = 1;
+		l = len(byte_array)
+
+		while current_byte < l - 1:
+			diff_file = self.absoluteDifferenceBetweenTwoHexadecimals(byte_array[current_byte], byte_array[current_byte + 1])
+
+			if diff_file == relative_array[0]:
+				temp_cb = current_byte + 1
+				temp_
 
 
 	# retorna a difereça absoluta (em decimal) entre dois hexas. 
