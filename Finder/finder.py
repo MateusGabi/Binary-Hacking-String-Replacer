@@ -103,8 +103,38 @@ class Finder():
 		# pegamos o array de byte do arquivo
 		byte_array = self.getRelativeValuesBySFile()
 
-		print byte_array
+		last_occour = 0
 
+
+		j = 0
+		i = 0
+		while i < len(byte_array) - 1:
+			a = byte_array[i]
+			b = relative_array[0]
+
+			if a == b:
+				j = 1
+				_i = i + 1
+				while j < len(relative_array) - 1:
+					c = byte_array[_i]
+					d = relative_array[j]
+
+					if c == d:
+						_i = _i + 1
+						j = j + 1
+					else:
+						break
+
+
+				if j == len(relative_array) - 1:
+					print "match on i = " + str(i)
+					last_occour = i
+
+
+			i = i + 1
+			j = 0
+
+		print byte_array[last_occour:last_occour+len(relative_array)]
 
 
 	# retorna a difereça absoluta (em decimal) entre dois hexas. 
@@ -126,3 +156,10 @@ def printArray(msg, array):
 
 
 	print msg + " {" + a[2:] + "}" 
+
+
+
+if __name__ == '__main__':
+	finder = Finder()
+
+	finder.run("file.fl", "elcome")
