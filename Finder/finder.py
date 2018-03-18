@@ -103,21 +103,33 @@ class Finder():
 		# pegamos o array de byte do arquivo
 		byte_array = self.getRelativeValuesBySFile()
 
+
+		last = self.findLastOccourInAray(byte_array, relative_array)
+
+		byte_array = self.fileToByteArray(self.filename)
+
+		print byte_array[last:last+len(relative_array)+1]
+
+		
+
+
+	def findLastOccourInAray(self, array_a, array_b):
+
 		last_occour = 0
 
 
 		j = 0
 		i = 0
-		while i < len(byte_array) - 1:
-			a = byte_array[i]
-			b = relative_array[0]
+		while i < len(array_a) - 1:
+			a = array_a[i]
+			b = array_b[0]
 
 			if a == b:
 				j = 1
 				_i = i + 1
-				while j < len(relative_array) - 1:
-					c = byte_array[_i]
-					d = relative_array[j]
+				while j < len(array_b) - 1:
+					c = array_a[_i]
+					d = array_b[j]
 
 					if c == d:
 						_i = _i + 1
@@ -126,7 +138,7 @@ class Finder():
 						break
 
 
-				if j == len(relative_array) - 1:
+				if j == len(array_b) - 1:
 					print "match on i = " + str(i)
 					last_occour = i
 
@@ -134,7 +146,7 @@ class Finder():
 			i = i + 1
 			j = 0
 
-		print byte_array[last_occour:last_occour+len(relative_array)]
+		return last_occour
 
 
 	# retorna a difereça absoluta (em decimal) entre dois hexas. 
