@@ -9,18 +9,22 @@
 # @author Mateus Gabi Moreira
 from __future__ import print_function
 import binascii
+import sys
+import os.path
 
 class Finder():
 
 	# metodo principal
 	def run(self, file, string):
-		self.filename = 'SMario.sfc'
+		self.filename = file
 		self.string = string
-		self.relativeSearch('SMario.sfc', string)
 
 
-	def fileToByteArray(self, filename):
-		with open('SMario.sfc', 'rb') as f:
+		self.relativeSearch()
+
+
+	def fileToByteArray(self):
+		with open(self.filename, 'rb') as f:
 			hexdata = binascii.hexlify(f.read())
 
 		return map(''.join, zip(hexdata[::2], hexdata[1::2]))
@@ -28,10 +32,7 @@ class Finder():
 
 	# dado uma string, retorna array de valores relativos absolutos
 	# o array sempre tera o tamanho da string - 1
-	def getRelativeValuesByString(self, string):
-
-
-		print("Finder: tentando obter os valores relativos de "+ str(string) +"...")
+	def getRelativeValuesByString(self):
 
 		#
 		# pegamos a string e traduzimos em um array de hexadecimais, de forma que
@@ -40,7 +41,7 @@ class Finder():
 		# Exemplo:
 		# translateStringToHexadecimalArray("abc")
 		#		returns [1, 2, 3]
-		array_hexa = self.translateStringToHexadecimalArray(string)
+		array_hexa = self.translateStringToHexadecimalArray(self.string)
 
 		## calcula a diferenca ##
 		i = 0
@@ -55,14 +56,14 @@ class Finder():
 			relative_values.append(_abs)
 			i = i + 1
 
-		print("Finder: valores relativos de " + str(string) + " é " + str(relative_values))
+		print("Finder: valores relativos de " + str(self.string) + " é " + str(relative_values))
 
 		return relative_values
 
 
 	def getRelativeValuesBySFile(self):
 
-		array_hexa = self.fileToByteArray(self.filename)
+		array_hexa = self.fileToByteArray()
 
 		## calcula a diferenca ##
 		i = 0
@@ -92,13 +93,13 @@ class Finder():
 
 
 	# faz o trabalho sujo da busca
-	def relativeSearch(self, filename, string):
+	def relativeSearch(self):
 
 
-		print("Finder: Fazendo a busca de " + str(string) + " em " + str(filename))
+		print("Finder: Fazendo a busca de " + str(self.string) + " em " + str(self.filename))
 
 		# pegamos os valores relativos da string
-		relative_array = self.getRelativeValuesByString(string)
+		relative_array = self.getRelativeValuesByString()
 
 		# pegamos o array de byte do arquivo
 		byte_array = self.getRelativeValuesBySFile()
@@ -106,9 +107,9 @@ class Finder():
 
 		last = self.findLastOccourInAray(byte_array, relative_array)
 
-		byte_array = self.fileToByteArray(self.filename)
+		byte_array = self.fileToByteArray()
 
-		array_char_string = [str(s) for s in string]
+		array_char_string = [str(s) for s in self.string]
 		array_hex_file = byte_array[last:last+len(relative_array)+1]
 
 		array_string_translate_to_hex = self.translateStringToHexadecimalArray(self.string)
@@ -204,6 +205,22 @@ class Finder():
 
 
 if __name__ == '__main__':
-	finder = Finder()
 
-	finder.run("file.fl", "elcome")
+	filename = sys.argv[1]
+	string = sys.argv[2]
+
+	if len(sys.argv) != 3:
+		print("Use: python finder.py [filename] [string] | grep -A2 [string]")
+		sys.exit(1)
+
+
+	if os.path.exists(filename) and os.path.isfile(filename):
+
+		finder = Finder()
+
+		finder.run(filename, string)
+
+	else:
+
+		print("Arquivo \""+ filename +"\" não encontrado para a busca por \""+ string +"\".")
+		sys.exit(1)
