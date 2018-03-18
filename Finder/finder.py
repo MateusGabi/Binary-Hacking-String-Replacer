@@ -7,15 +7,15 @@
 # string dentro do documento.
 #
 # @author Mateus Gabi Moreira
-
+from __future__ import print_function
 import binascii
 
 class Finder():
 
 	# metodo principal
 	def run(self, file, string):
-		print "Finder: rodando..."
 		self.filename = 'SMario.sfc'
+		self.string = string
 		self.relativeSearch('SMario.sfc', string)
 
 
@@ -31,7 +31,7 @@ class Finder():
 	def getRelativeValuesByString(self, string):
 
 
-		print "Finder: tentando obter os valores relativos de "+ str(string) +"..."
+		print("Finder: tentando obter os valores relativos de "+ str(string) +"...")
 
 		#
 		# pegamos a string e traduzimos em um array de hexadecimais, de forma que
@@ -55,7 +55,7 @@ class Finder():
 			relative_values.append(_abs)
 			i = i + 1
 
-		print "Finder: valores relativos de " + str(string) + " é " + str(relative_values)
+		print("Finder: valores relativos de " + str(string) + " é " + str(relative_values))
 
 		return relative_values
 
@@ -95,7 +95,7 @@ class Finder():
 	def relativeSearch(self, filename, string):
 
 
-		print "Finder: Fazendo a busca de " + str(string) + " em " + str(filename)
+		print("Finder: Fazendo a busca de " + str(string) + " em " + str(filename))
 
 		# pegamos os valores relativos da string
 		relative_array = self.getRelativeValuesByString(string)
@@ -108,8 +108,51 @@ class Finder():
 
 		byte_array = self.fileToByteArray(self.filename)
 
-		print byte_array[last:last+len(relative_array)+1]
+		array_char_string = [str(s) for s in string]
+		array_hex_file = byte_array[last:last+len(relative_array)+1]
 
+		array_string_translate_to_hex = self.translateStringToHexadecimalArray(self.string)
+
+
+		# print array_string_translate_to_hex
+		# print array_hex_file
+
+		offset = int(array_string_translate_to_hex[0], 16) - int(array_hex_file[0], 16)
+
+		## TODO: validador: um for que percorre todos os valores vendo se o offset nao mudou
+
+		offset = hex(offset)
+
+		# print str(offset)
+
+		translated_content = ''
+
+		for byte in byte_array:
+			sume = hex(int(byte,16)+int(offset,16))
+			sume = int(sume, 16)
+
+			if sume > 45 and sume < 90:
+				sume = sume + 32
+
+			if sume < 0:
+				print('<>', end='')
+
+			else:
+
+				if sume == 91:
+					print('!', end='')
+
+				# espaço no texto
+				elif sume == 96:
+					print(' ', end='')
+
+				else:
+					try:
+						print("%c" % sume, end='')
+					except Exception as e:
+						print('#')
+
+		
 		
 
 
@@ -139,7 +182,7 @@ class Finder():
 
 
 				if j == len(array_b) - 1:
-					print "match on i = " + str(i)
+					print("match on i = " + str(i))
 					last_occour = i
 
 
@@ -157,17 +200,6 @@ class Finder():
 
 		return abs(_a - _b)
 
-
-#
-# prints an array
-def printArray(msg, array):
-
-	a = ""
-	for x in array:
-		a = a + ", " + str(x)
-
-
-	print msg + " {" + a[2:] + "}" 
 
 
 
