@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+Finder.
 
-# Finder.
-#
-# A partir de um arquivo binario e de uma string de busca,
-# o Finder eh capaz de encontrar possiveis ocorrencias desta
-# string dentro do documento.
-#
-# @author Mateus Gabi Moreira
+A partir de um arquivo binario e de uma string de busca,
+o Finder eh capaz de encontrar possiveis ocorrencias desta
+string utilizando busca relativa dentro do documento.
+
+@author Mateus Gabi Moreira
+"""
 from __future__ import print_function
 import binascii
 import sys
@@ -23,15 +24,19 @@ class Finder():
 		self.relativeSearch()
 
 
+	"""
+	pega o arquivo e retorna seus bytes em um array de bytes
+	"""
 	def fileToByteArray(self):
 		with open(self.filename, 'rb') as f:
 			hexdata = binascii.hexlify(f.read())
 
 		return map(''.join, zip(hexdata[::2], hexdata[1::2]))
 
-
-	# dado uma string, retorna array de valores relativos absolutos
-	# o array sempre tera o tamanho da string - 1
+	"""
+	Retorna array de valores relativos absolutos da string de busca. O array sempre
+	terá o tamanho da string - 1.
+	"""
 	def getRelativeValuesByString(self):
 
 		#
@@ -43,6 +48,9 @@ class Finder():
 		#		returns [1, 2, 3]
 		array_hexa = self.translateStringToHexadecimalArray(self.string)
 
+		"""
+		TODO método que encapsula o cálculo de valores relativos
+		"""
 		## calcula a diferenca ##
 		i = 0
 		relative_values = []
@@ -61,10 +69,16 @@ class Finder():
 		return relative_values
 
 
+	"""
+	Retorna os valores relativos do arquivo passado como input
+	"""
 	def getRelativeValuesBySFile(self):
 
 		array_hexa = self.fileToByteArray()
 
+		"""
+		TODO método que encapsula o cálculo de valores relativos
+		"""
 		## calcula a diferenca ##
 		i = 0
 		relative_values = []
@@ -81,8 +95,10 @@ class Finder():
 		return relative_values
 
 
-	# retorna um array de hexadecimais dado a string. Exemplo:
-	# "string" => [73, 74, 72, 69, 6e, 67]
+	"""
+	retorna um array de hexadecimais dado a string. Exemplo:
+	"string" => [73, 74, 72, 69, 6e, 67]
+	"""
 	def translateStringToHexadecimalArray(self, string):
 
 		relative_values = []
@@ -114,19 +130,12 @@ class Finder():
 
 		array_string_translate_to_hex = self.translateStringToHexadecimalArray(self.string)
 
-
-		# print array_string_translate_to_hex
-		# print array_hex_file
-
 		offset = int(array_string_translate_to_hex[0], 16) - int(array_hex_file[0], 16)
 
-		## TODO: validador: um for que percorre todos os valores vendo se o offset nao mudou
-
+		"""
+		TODO: validador: um for que percorre todos os valores vendo se o offset nao mudou
+		"""
 		offset = hex(offset)
-
-		# print str(offset)
-
-		translated_content = ''
 
 		for byte in byte_array:
 			sume = hex(int(byte,16)+int(offset,16))
@@ -156,7 +165,10 @@ class Finder():
 		
 		
 
-
+	"""
+	Encontra última ocorrência do array_b dentro do array_a. Isso serve para
+	retornar a última possível palavra encontrada.
+	"""
 	def findLastOccourInAray(self, array_a, array_b):
 
 		last_occour = 0
@@ -206,12 +218,13 @@ class Finder():
 
 if __name__ == '__main__':
 
-	filename = sys.argv[1]
-	string = sys.argv[2]
-
 	if len(sys.argv) != 3:
 		print("Use: python finder.py [filename] [string] | grep -A2 [string]")
 		sys.exit(1)
+		
+
+	filename = sys.argv[1]
+	string = sys.argv[2]
 
 
 	if os.path.exists(filename) and os.path.isfile(filename):
