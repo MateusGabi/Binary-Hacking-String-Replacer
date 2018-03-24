@@ -1,0 +1,15 @@
+language: python
+python:
+  - "2.7"
+
+install:
+  - pip install -r dependencies.txt
+
+script:
+  - echo "No test"
+
+
+notifications:
+    email:
+        recipients:
+            - mateusgabimoreira@gmail.com
