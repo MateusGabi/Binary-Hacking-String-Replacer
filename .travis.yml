@@ -6,7 +6,8 @@ install:
   - pip install -r dependencies.txt
 
 script:
-  - echo "No test"
+  - echo "Testing Finder"
+  - python Finder/finder-test.py
 
 
 notifications:
