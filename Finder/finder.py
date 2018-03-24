@@ -15,11 +15,12 @@ import os.path
 
 class Finder():
 
-	# metodo principal
-	def run(self, file, string):
-		self.filename = file
+	def __init__(self, filename, string):
+		self.filename = filename
 		self.string = string
 
+	# metodo principal
+	def run(self):
 
 		self.relativeSearch()
 
@@ -46,7 +47,7 @@ class Finder():
 		# Exemplo:
 		# translateStringToHexadecimalArray("abc")
 		#		returns [1, 2, 3]
-		array_hexa = self.translateStringToHexadecimalArray(self.string)
+		array_hexa = self.translateStringToHexadecimalArray()
 
 		"""
 		TODO método que encapsula o cálculo de valores relativos
@@ -99,10 +100,10 @@ class Finder():
 	retorna um array de hexadecimais dado a string. Exemplo:
 	"string" => [73, 74, 72, 69, 6e, 67]
 	"""
-	def translateStringToHexadecimalArray(self, string):
+	def translateStringToHexadecimalArray(self):
 
 		relative_values = []
-		for x in string:
+		for x in self.string:
 			relative_values.append(str(x).encode("hex"))
 
 		return relative_values
@@ -128,7 +129,7 @@ class Finder():
 		array_char_string = [str(s) for s in self.string]
 		array_hex_file = byte_array[last:last+len(relative_array)+1]
 
-		array_string_translate_to_hex = self.translateStringToHexadecimalArray(self.string)
+		array_string_translate_to_hex = self.translateStringToHexadecimalArray()
 
 		offset = int(array_string_translate_to_hex[0], 16) - int(array_hex_file[0], 16)
 
@@ -229,9 +230,9 @@ if __name__ == '__main__':
 
 	if os.path.exists(filename) and os.path.isfile(filename):
 
-		finder = Finder()
+		finder = Finder(filename, string)
 
-		finder.run(filename, string)
+		finder.run()
 
 	else:
 
