@@ -128,6 +128,10 @@ class Finder():
 		array_char_string = [str(s) for s in self.string]
 		array_hex_file = byte_array[last:last+len(relative_array)+1]
 
+		print(array_hex_file);
+		print(byte_array[last - 2])
+		# sys.exit(1);
+
 		array_string_translate_to_hex = self.translateStringToHexadecimalArray(self.string)
 
 		offset = int(array_string_translate_to_hex[0], 16) - int(array_hex_file[0], 16)
@@ -138,29 +142,44 @@ class Finder():
 		offset = hex(offset)
 
 		for byte in byte_array:
-			sume = hex(int(byte,16)+int(offset,16))
-			sume = int(sume, 16)
 
-			if sume > 45 and sume < 90:
-				sume = sume + 32
+			""" Caracteres Maiusculos e com início de linha começam em 00"""
+			b = int(byte,16)
+			if b >= 0 and b < 5:
+				b = hex( b + int('41', 16))
+				b = int(b, 16)
+				print("")
+				print("%c" % b, end='')
 
-			if sume < 0:
-				print('<>', end='')
+
+			# if b >= 187 and b < :
+			# 	pass
 
 			else:
 
-				if sume == 91:
-					print('!', end='')
+				sume = hex(int(byte,16)+int(offset,16))
+				sume = int(sume, 16)
+				
+				if sume > 45 and sume < 90:
+					sume = sume + 32
 
-				# espaço no texto
-				elif sume == 96:
-					print(' ', end='')
+				if sume < 0:
+					print('<>', end='')
 
 				else:
-					try:
-						print("%c" % sume, end='')
-					except Exception as e:
-						print('#')
+
+					if sume == 91:
+						print('!', end='')
+
+					# espaço no texto
+					elif sume == 96:
+						print(' ', end='')
+
+					else:
+						try:
+							print("%c" % sume, end='')
+						except Exception as e:
+							print('#')
 
 		
 		
