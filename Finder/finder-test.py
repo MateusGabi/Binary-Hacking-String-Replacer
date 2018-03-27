@@ -21,5 +21,18 @@ class TestFinder(unittest.TestCase):
         self.assertEqual(a, expected)
         self.assertEqual(b, expected)
 
+    def test_findLastOccourInAray(self):
+        response = self.instance.findLastOccourInAray([1, 2, 3, 4], [3, 4])
+        self.assertEqual(2, response)
+
+        response = self.instance.findLastOccourInAray([1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 8, 5], [3, 4])
+        self.assertEqual(8, response)
+
+    def test_getRelativeValuesByString(self):
+        expected = [7, 9, 12, 2, 8]
+        response = self.instance.getRelativeValuesByString()
+
+        self.assertEqual(expected, response)
+
 if __name__ == '__main__':
     unittest.main()

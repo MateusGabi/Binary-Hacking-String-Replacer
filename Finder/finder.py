@@ -215,7 +215,7 @@ class Finder():
 
 
 				if j == len(array_b) - 1:
-					print("match on i = " + str(i))
+					# print("match on i = " + str(i))
 					last_occour = i
 
 
