@@ -66,8 +66,8 @@ class Finder():
 
 		
 
-		for a in file:
-			print(self.dictionary.get(a, ""), end='')
+		# for a in file:
+		# 	print(self.dictionary.get(a, ""), end='')
 
 
 						
@@ -178,7 +178,7 @@ class Finder():
 
 
 		""" 13 é T"""
-		self
+		# self
 
 if __name__ == '__main__':
 
