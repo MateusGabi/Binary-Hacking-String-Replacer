@@ -14,7 +14,7 @@ class TestFinder(unittest.TestCase):
         self.assertEqual(arr, expected)
 
     def test_getRelativeValuesByString(self):
-        self.assertEqual([], self.instance.getRelativeValuesByString())
+        self.assertEqual([7, 9, 12, 2, 8], self.instance.getRelativeValuesByString())
 
     def test_absoluteDifferenceBetweenTwoHexadecimals(self):
         expected = 1
