@@ -19,11 +19,58 @@ class Finder():
 		self.filename = filename
 		self.string = string
 
+
+		self.dictionary = {}
+
 	# metodo principal
 	def run(self):
 
-		self.relativeSearch()
+		string_relative = self.getRelativeValuesByString()
+		file = self.fileToByteArray()
 
+		# print(string_relative)
+		# sys.exit()
+
+
+		file_size = len(file)
+		for i in range(1, file_size - 1):
+			diff_file = self.absoluteDifferenceBetweenTwoHexadecimals(file[i - 1], file[i])
+			j = 0
+			_i = i + 1
+			string_on_file = []
+			string_on_file.append(file[i-1])
+			while diff_file == string_relative[j]:
+				diff_file = self.absoluteDifferenceBetweenTwoHexadecimals(file[_i - 1], file[_i])
+				string_on_file.append(file[_i-1])
+				_i = _i + 1
+				j = j + 1
+
+				if j == len(string_relative):
+					print("match on: " + str(_i))
+
+					self.generateTBL(string_on_file[0], self.string[0])
+
+					# for s, v in zip(string_on_file, self.string):
+					# 	self.dictionary[s] = v
+
+					print(self.dictionary)
+					print(string_on_file)
+
+
+
+					try:
+						print(self.dictionary['a'])
+					except KeyError as e:
+						print('', end='')
+					break
+
+		
+
+		# for a in file:
+		# 	print(self.dictionary.get(a, ""), end='')
+
+
+						
 
 	"""
 	pega o arquivo e retorna seus bytes em um array de bytes
@@ -65,36 +112,7 @@ class Finder():
 			relative_values.append(_abs)
 			i = i + 1
 
-		print("Finder: valores relativos de " + str(self.string) + " é " + str(relative_values))
-
 		return relative_values
-
-
-	"""
-	Retorna os valores relativos do arquivo passado como input
-	"""
-	def getRelativeValuesBySFile(self):
-
-		array_hexa = self.fileToByteArray()
-
-		"""
-		TODO método que encapsula o cálculo de valores relativos
-		"""
-		## calcula a diferenca ##
-		i = 0
-		relative_values = []
-
-		while i < len(array_hexa) - 1:
-
-			a = array_hexa[i]
-			b = array_hexa[i + 1]
-
-			_abs = self.absoluteDifferenceBetweenTwoHexadecimals(a, b)
-			relative_values.append(_abs)
-			i = i + 1
-
-		return relative_values
-
 
 	"""
 	retorna um array de hexadecimais dado a string. Exemplo:
@@ -108,104 +126,6 @@ class Finder():
 
 		return relative_values
 
-
-	# faz o trabalho sujo da busca
-	def relativeSearch(self):
-
-
-		print("Finder: Fazendo a busca de " + str(self.string) + " em " + str(self.filename))
-
-		# pegamos os valores relativos da string
-		relative_array = self.getRelativeValuesByString()
-
-		# pegamos o array de byte do arquivo
-		byte_array = self.getRelativeValuesBySFile()
-
-
-		last = self.findLastOccourInAray(byte_array, relative_array)
-
-		byte_array = self.fileToByteArray()
-
-		array_char_string = [str(s) for s in self.string]
-		array_hex_file = byte_array[last:last+len(relative_array)+1]
-
-		array_string_translate_to_hex = self.translateStringToHexadecimalArray()
-
-		offset = int(array_string_translate_to_hex[0], 16) - int(array_hex_file[0], 16)
-
-		"""
-		TODO: validador: um for que percorre todos os valores vendo se o offset nao mudou
-		"""
-		offset = hex(offset)
-
-		for byte in byte_array:
-			sume = hex(int(byte,16)+int(offset,16))
-			sume = int(sume, 16)
-
-			if sume > 45 and sume < 90:
-				sume = sume + 32
-
-			if sume < 0:
-				print('<>', end='')
-
-			else:
-
-				if sume == 91:
-					print('!', end='')
-
-				# espaço no texto
-				elif sume == 96:
-					print(' ', end='')
-
-				else:
-					try:
-						print("%c" % sume, end='')
-					except Exception as e:
-						print('#')
-
-		
-		
-
-	"""
-	Encontra última ocorrência do array_b dentro do array_a. Isso serve para
-	retornar a última possível palavra encontrada.
-	"""
-	def findLastOccourInAray(self, array_a, array_b):
-
-		last_occour = 0
-
-
-		j = 0
-		i = 0
-		while i < len(array_a) - 1:
-			a = array_a[i]
-			b = array_b[0]
-
-			if a == b:
-				j = 1
-				_i = i + 1
-				while j < len(array_b) - 1:
-					c = array_a[_i]
-					d = array_b[j]
-
-					if c == d:
-						_i = _i + 1
-						j = j + 1
-					else:
-						break
-
-
-				if j == len(array_b) - 1:
-					print("match on i = " + str(i))
-					last_occour = i
-
-
-			i = i + 1
-			j = 0
-
-		return last_occour
-
-
 	# retorna a difereça absoluta (em decimal) entre dois hexas. 
 	def absoluteDifferenceBetweenTwoHexadecimals(self, a, b):
 		
@@ -215,7 +135,50 @@ class Finder():
 		return abs(_a - _b)
 
 
+	def generateTBL(self, hexadecimal, value):
+		letter_in_ascii = ord(value)
+		hexadecimal_in_decimal = int(hexadecimal, 16)
 
+		offset_minuscula = hexadecimal_in_decimal - letter_in_ascii
+		offset_maiuscula = 19 - 84
+		offset_minuscula_eol = 210 - 115
+
+		"""letras minusculas"""
+		for x in xrange(97, 122):
+			a = hex(x + offset_minuscula).split('x')[-1]
+			self.dictionary[""+str(a)+""] = chr(x)
+
+		""" letras maiusculas"""
+		for x in xrange(65, 90):
+			a = hex(x + offset_maiuscula).split('x')[-1]
+			self.dictionary[""+str(a)+""] = chr(x)
+
+		""" letras minusculas com eol"""
+		for x in xrange(97, 122):
+			a = hex(x + offset_minuscula_eol).split('x')[-1]
+			self.dictionary[""+str(a)+""] = chr(x) + "\n"
+
+		""" 1f é Space """
+		self.dictionary['1f'] = " "
+		self.dictionary['1a'] = "!"
+		self.dictionary['1b'] = "."
+
+
+		""" letras maiusculas perdidas"""
+		self.dictionary['03'] = 'D'
+		self.dictionary['08'] = 'I'
+		self.dictionary['0b'] = 'L'
+		self.dictionary['0c'] = 'M'
+		self.dictionary['0d'] = 'N'
+		self.dictionary['0e'] = 'O'
+		self.dictionary['0f'] = 'P'
+		self.dictionary['10'] = 'Q'
+		self.dictionary['11'] = 'R'
+		self.dictionary['12'] = 'S'
+
+
+		""" 13 é T"""
+		# self
 
 if __name__ == '__main__':
 
