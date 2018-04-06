@@ -12,6 +12,7 @@ from __future__ import print_function
 import binascii
 import sys
 import os.path
+import pickle
 
 class Finder():
 
@@ -48,7 +49,7 @@ class Finder():
 				if j == len(string_relative):
 					print("match on: " + str(_i))
 
-					self.generateTBL(string_on_file[0], self.string[0])
+					self.generateTBL(string_on_file[0], self.string[0], _i - len(self.string) - 1 )
 
 					# for s, v in zip(string_on_file, self.string):
 					# 	self.dictionary[s] = v
@@ -135,7 +136,7 @@ class Finder():
 		return abs(_a - _b)
 
 
-	def generateTBL(self, hexadecimal, value):
+	def generateTBL(self, hexadecimal, value, offset):
 		letter_in_ascii = ord(value)
 		hexadecimal_in_decimal = int(hexadecimal, 16)
 
@@ -175,6 +176,12 @@ class Finder():
 		self.dictionary['10'] = 'Q'
 		self.dictionary['11'] = 'R'
 		self.dictionary['12'] = 'S'
+
+		self.dictionary['offset'] = offset
+
+		_filename = self.filename.replace("sfc","btbl")
+		_fileobj = open(_filename, "wb")
+		pickle.Pickler(_fileobj, protocol=2).dump(self.dictionary)
 
 
 		""" 13 é T"""
