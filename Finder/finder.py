@@ -163,6 +163,7 @@ class Finder():
 		self.dictionary['1f'] = " "
 		self.dictionary['1a'] = "!"
 		self.dictionary['1b'] = "."
+		self.dictionary['9a'] = "!\n"
 
 
 		""" letras maiusculas perdidas"""
