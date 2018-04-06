@@ -12,6 +12,7 @@ from __future__ import print_function
 import binascii
 import sys
 import os.path
+import pickle
 
 class Finder():
 
@@ -48,7 +49,7 @@ class Finder():
 				if j == len(string_relative):
 					print("match on: " + str(_i))
 
-					self.generateTBL(string_on_file[0], self.string[0])
+					self.generateTBL(string_on_file[0], self.string[0], _i - len(self.string) - 1 )
 
 					# for s, v in zip(string_on_file, self.string):
 					# 	self.dictionary[s] = v
@@ -135,7 +136,7 @@ class Finder():
 		return abs(_a - _b)
 
 
-	def generateTBL(self, hexadecimal, value):
+	def generateTBL(self, hexadecimal, value, offset):
 		letter_in_ascii = ord(value)
 		hexadecimal_in_decimal = int(hexadecimal, 16)
 
@@ -151,7 +152,7 @@ class Finder():
 		""" letras maiusculas"""
 		for x in xrange(65, 90):
 			a = hex(x + offset_maiuscula).split('x')[-1]
-			self.dictionary[""+str(a)+""] = chr(x)
+			self.dictionary[""+str(a).rjust(2, '0')+""] = chr(x)
 
 		""" letras minusculas com eol"""
 		for x in xrange(97, 122):
@@ -162,19 +163,26 @@ class Finder():
 		self.dictionary['1f'] = " "
 		self.dictionary['1a'] = "!"
 		self.dictionary['1b'] = "."
+		self.dictionary['9a'] = "!\n"
 
 
 		""" letras maiusculas perdidas"""
-		self.dictionary['03'] = 'D'
-		self.dictionary['08'] = 'I'
-		self.dictionary['0b'] = 'L'
-		self.dictionary['0c'] = 'M'
-		self.dictionary['0d'] = 'N'
-		self.dictionary['0e'] = 'O'
-		self.dictionary['0f'] = 'P'
-		self.dictionary['10'] = 'Q'
-		self.dictionary['11'] = 'R'
-		self.dictionary['12'] = 'S'
+		# self.dictionary['03'] = 'D'
+		# self.dictionary['08'] = 'I'
+		# self.dictionary['0b'] = 'L'
+		# self.dictionary['0c'] = 'M'
+		# self.dictionary['0d'] = 'N'
+		# self.dictionary['0e'] = 'O'
+		# self.dictionary['0f'] = 'P'
+		# self.dictionary['10'] = 'Q'
+		# self.dictionary['11'] = 'R'
+		# self.dictionary['12'] = 'S'
+
+		self.dictionary['offset'] = offset
+
+		_filename = self.filename.replace("sfc","btbl")
+		_fileobj = open(_filename, "wb")
+		pickle.Pickler(_fileobj, protocol=2).dump(self.dictionary)
 
 
 		""" 13 é T"""
