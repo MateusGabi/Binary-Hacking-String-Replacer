@@ -152,7 +152,7 @@ class Finder():
 		""" letras maiusculas"""
 		for x in xrange(65, 90):
 			a = hex(x + offset_maiuscula).split('x')[-1]
-			self.dictionary[""+str(a)+""] = chr(x)
+			self.dictionary[""+str(a).rjust(2, '0')+""] = chr(x)
 
 		""" letras minusculas com eol"""
 		for x in xrange(97, 122):
@@ -167,16 +167,16 @@ class Finder():
 
 
 		""" letras maiusculas perdidas"""
-		self.dictionary['03'] = 'D'
-		self.dictionary['08'] = 'I'
-		self.dictionary['0b'] = 'L'
-		self.dictionary['0c'] = 'M'
-		self.dictionary['0d'] = 'N'
-		self.dictionary['0e'] = 'O'
-		self.dictionary['0f'] = 'P'
-		self.dictionary['10'] = 'Q'
-		self.dictionary['11'] = 'R'
-		self.dictionary['12'] = 'S'
+		# self.dictionary['03'] = 'D'
+		# self.dictionary['08'] = 'I'
+		# self.dictionary['0b'] = 'L'
+		# self.dictionary['0c'] = 'M'
+		# self.dictionary['0d'] = 'N'
+		# self.dictionary['0e'] = 'O'
+		# self.dictionary['0f'] = 'P'
+		# self.dictionary['10'] = 'Q'
+		# self.dictionary['11'] = 'R'
+		# self.dictionary['12'] = 'S'
 
 		self.dictionary['offset'] = offset
 
