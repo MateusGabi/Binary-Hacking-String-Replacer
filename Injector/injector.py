@@ -55,7 +55,6 @@ class Injector:
         with open(self.substituto, "r") as _txtfile:
             _txt = _txtfile.read().replace('\n', '')
 
-        print(len(self.bytefile))
         for numero_linha in xrange(1, 9):
             for numero_coluna in xrange(1, 18):
                 try:
@@ -67,7 +66,6 @@ class Injector:
                 char_count = char_count + 1
                 self.offset = self.offset + 1
 
-        print(len(self.bytefile))
         # with open(self.sfc.replace(".sfc", ".modified.sfc"), "wb") as sfc_file:
         sfc_file = open(self.sfc.replace(".sfc", ".modified.sfc"), "wb")
         for byte in self.bytefile:
