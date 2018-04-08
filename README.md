@@ -12,12 +12,16 @@ Já o Injector injeta em uma caixa de diálogo do binário um texto. Esse texto 
 
 ## Comandos
 
-> python Finder\finder.py [Arquivo SFC] [string]
-> python Extractor\extractor.py [Arquivo SFC] [Arquivo BTBL]
-> python Injector\injector.py [Arquivo SFC] [Arquivo BTBL] [Arquivo INJ]
+```
+python Finder\finder.py [Arquivo SFC] [string]
+python Extractor\extractor.py [Arquivo SFC] [Arquivo BTBL]
+python Injector\injector.py [Arquivo SFC] [Arquivo BTBL] [Arquivo INJ]
+```
 
 Exemplo:
 
-> python Finder\finder.py ..\smario.sfc elcome
-> python Extractor\extractor.py ..\smario.sfc ..\smario.btbl
-> python Injector\injector.py ..\smario.sfc ..\smario.btbl ..\smario.inj.txt
+```
+python Finder\finder.py ..\smario.sfc elcome
+python Extractor\extractor.py ..\smario.sfc ..\smario.btbl
+python Injector\injector.py ..\smario.sfc ..\smario.btbl ..\smario.inj.txt
+```
